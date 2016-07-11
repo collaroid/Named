@@ -1,6 +1,5 @@
 package com.collar.named.util;
 
-import com.google.common.base.Charsets;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
@@ -37,8 +36,7 @@ public class HttpUtils {
 			response = httpClient.execute(httpGet);
 			if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 				HttpEntity entity = response.getEntity();
-				String rspStr = EntityUtils.toString(entity, Charsets.UTF_8);
-				System.out.println("http response data: " + rspStr);
+				String rspStr = EntityUtils.toString(entity, "GBK");
 				return rspStr;
 			}
 		} catch (ClientProtocolException e) {

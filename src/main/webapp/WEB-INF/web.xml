@@ -7,7 +7,7 @@
 
     <context-param>
         <param-name>webAppRootKey</param-name>
-        <param-value>named.root</param-value>
+        <param-value>NameD.root</param-value>
     </context-param>
 
     <context-param>
