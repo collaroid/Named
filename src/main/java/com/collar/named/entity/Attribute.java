@@ -1,5 +1,8 @@
 package com.collar.named.entity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by Frank on 7/10/16.
  */
@@ -13,9 +16,20 @@ public enum Attribute {
 
     private int id;
     private String name;
+    private static Map<String, Attribute> nameMap = new HashMap<String, Attribute>(10);
+
+    static {
+        for (Attribute attribute : Attribute.values()) {
+            nameMap.put(attribute.name, attribute);
+        }
+    }
 
     Attribute (int id, String name){
         this.id = id;
         this.name = name;
+    }
+
+    public static Attribute getAttributeByName (String name) {
+        return nameMap.get(name);
     }
 }

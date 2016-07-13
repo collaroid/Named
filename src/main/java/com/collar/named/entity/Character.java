@@ -50,4 +50,9 @@ public class Character {
     public void setPingying(String pingying) {
         this.pingying = pingying;
     }
+
+    @Override
+    public String toString() {
+        return "汉字: " + this.value;
+    }
 }
