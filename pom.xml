@@ -181,6 +181,13 @@
             <version>2.6</version>
         </dependency>
 
+        <!-- data source config -->
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>1.4</version>
+        </dependency>
+
         <!-- http components -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>

@@ -1,8 +1,12 @@
 package com.collar.named.service;
 
+import com.collar.named.dao.CharacterDao;
 import com.collar.named.entity.Attribute;
 import com.collar.named.entity.Character;
 import com.collar.named.util.HttpUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -11,7 +15,12 @@ import java.util.regex.Pattern;
 /**
  * Created by Frank on 7/10/16.
  */
+@Service("spider")
 public class Spider {
+
+    @Autowired
+    @Qualifier("characterDao")
+    private CharacterDao characterDao;
 
     private String tmpUrl = "http://www.t7y8.com/hanyu/kangxi/zidian/@num.htm";
 
@@ -42,7 +51,7 @@ public class Spider {
             ping = pingMatcher.group(1);
         }
 
-        character.setValue(c);
+        character.setKey(c);
         character.setAttribute(Attribute.getAttributeByName(wu));
         character.setPingying(ping);
         character.setUrl(url);
@@ -55,19 +64,27 @@ public class Spider {
         return character;
     }
 
-    public void generateCharList(){
+    private ArrayList<Character> generateCharList(){
         ArrayList<Character> characterList = new ArrayList<Character>(7055);
         for (int i=1; i<=7055; i++){
             String url = tmpUrl.replace("@num", String.valueOf(i));
             Character character = getCharacter(url);
             characterList.add(character);
-            System.out.println(character);
+            System.out.println("get:" + character);
         }
-        System.out.println(characterList.toString());
+        return characterList;
     }
 
-    public static void main(String[] args) {
-        Spider spider = new Spider();
-        spider.generateCharList();
+    public boolean storeCharacter(){
+        ArrayList<Character> characters = generateCharList();
+        if (characters == null || characters.isEmpty()) {
+            System.out.println("char list is empty!");
+            return false;
+        }
+        int[] result = characterDao.insertCharacterList(characters);
+        if (result == null || result.length == 0) {
+            return false;
+        }
+        return true;
     }
 }

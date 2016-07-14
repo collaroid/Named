@@ -7,7 +7,7 @@ public class Character {
 
     private int strokes;
     private Attribute attribute;
-    private String value;
+    private String key;
     private String url;
     private String pingying;
 
@@ -27,12 +27,12 @@ public class Character {
         this.attribute = attribute;
     }
 
-    public String getValue() {
-        return value;
+    public String getKey() {
+        return key;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getUrl() {
@@ -53,6 +53,6 @@ public class Character {
 
     @Override
     public String toString() {
-        return "汉字: " + this.value;
+        return "汉字: " + this.key;
     }
 }
