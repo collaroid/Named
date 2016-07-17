@@ -16,13 +16,20 @@
         http://www.springframework.org/schema/aop 
         http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-    <context:annotation-config />
     <context:component-scan base-package="com.collar.named.api">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />
     </context:component-scan>
 
-    <mvc:annotation-driven />
+    <!-- 默认的注解映射的支持 -->
+    <mvc:annotation-driven conversion-service="conversionService"/>
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+
+            </set>
+        </property>
+    </bean>
 
     <!-- view resolver -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -30,9 +37,10 @@
         <property name="suffix" value=".jsp"></property>
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
     </bean>
+
     <!-- spring mvc整合json，处理JSON数据转换的 -->
     <bean id="mappingJacksonHttpMessageConverter"
-          class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+          class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
         <!-- 为了处理返回的JSON数据的编码，默认是ISO-88859-1的，这里把它设置为UTF-8,解决有乱码的情况 -->
         <property name="supportedMediaTypes">
             <list>
@@ -40,6 +48,12 @@
                 <value>text/javascript;charset=UTF-8</value>
             </list>
         </property>
+    </bean>
+
+    <bean id="handlerMapping"
+          class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+        <property name="order" value="1" />
+        <property name = "alwaysUseFullPath" value = "true" />
     </bean>
 
 </beans>

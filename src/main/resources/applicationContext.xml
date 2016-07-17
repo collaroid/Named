@@ -20,28 +20,18 @@
     http://www.springframework.org/schema/util/spring-util-3.0.xsd"
     >
 
-	<bean id="txBeanNameProxyCreator"
-		class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
-		<property name="interceptorNames">
-			<list>
-				<value>txInterceptor</value>
-			</list>
-		</property>
-		<property name="beanNames">
-			<list>
-				<value>*Service</value>
-				<value>*ServiceImpl</value>
-				<value>*Dao</value>
-				<value>*DaoImpl</value>
-			</list>
-		</property>
-	</bean>
+	<context:annotation-config />
+
+	<context:component-scan base-package="com.collar.named" >
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
 
 	<bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location">
 			<value>classpath:init.properties</value>
 		</property>
 	</bean>
+
 
 	<bean id="dataSourceDefault" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName">
@@ -88,4 +78,8 @@
     <task:scheduler id="scheduler" pool-size="5" />
     <task:executor id="executor" pool-size="5" rejection-policy="CALLER_RUNS" />
     <!-- scheduler end -->
+
+	<bean id="baseJdbcDao" class="com.collar.named.dao.BaseJdbcDao">
+		<property name="dataSource" ref="dataSourceDefault"/>
+	</bean>
 </beans>
