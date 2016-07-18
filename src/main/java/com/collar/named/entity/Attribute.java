@@ -8,6 +8,7 @@ import java.util.Map;
  */
 public enum Attribute {
 
+    Unknow(0, "未知"),
     Gold(1, "金"),
     Wood(2, "木"),
     Water(3, "水"),
@@ -30,6 +31,9 @@ public enum Attribute {
     }
 
     public static Attribute getAttributeByName (String name) {
+        if (nameMap.get(name) == null) {
+            return Unknow;
+        }
         return nameMap.get(name);
     }
 

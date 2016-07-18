@@ -5,11 +5,21 @@ package com.collar.named.entity;
  */
 public class Character {
 
+    private int id;
     private int strokes;
     private Attribute attribute;
     private String key;
     private String url;
     private String pingying;
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public int getStrokes() {
         return strokes;

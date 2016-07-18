@@ -6,9 +6,11 @@ import com.collar.named.entity.Character;
 import com.collar.named.util.HttpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.Vector;
+import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,6 +23,10 @@ public class Spider {
     @Autowired
     @Qualifier("characterDao")
     private CharacterDao characterDao;
+
+    @Autowired
+    @Qualifier("taskExecutor_http")
+    private ThreadPoolTaskExecutor taskExecutor;
 
     private String tmpUrl = "http://www.t7y8.com/hanyu/kangxi/zidian/@num.htm";
 
@@ -52,7 +58,11 @@ public class Spider {
         }
 
         character.setKey(c);
-        character.setAttribute(Attribute.getAttributeByName(wu));
+        Attribute attribute = Attribute.getAttributeByName(wu);
+        if (attribute == Attribute.Unknow) {
+            System.out.println(c + ": " + wu);
+        }
+        character.setAttribute(attribute);
         character.setPingying(ping);
         character.setUrl(url);
         try {
@@ -64,19 +74,39 @@ public class Spider {
         return character;
     }
 
-    private ArrayList<Character> generateCharList(){
-        ArrayList<Character> characterList = new ArrayList<Character>(7055);
+    private Vector<Character> generateCharList(){
+        final Vector<Character> characterList = new Vector<Character>(7055);
+        final CountDownLatch latch = new CountDownLatch(7055);
         for (int i=1; i<=7055; i++){
-            String url = tmpUrl.replace("@num", String.valueOf(i));
-            Character character = getCharacter(url);
-            characterList.add(character);
-            System.out.println("get:" + character);
+            final String url = tmpUrl.replace("@num", String.valueOf(i));
+            final int id = i;
+            taskExecutor.execute(new Runnable() {
+                public void run() {
+                    Character character = null;
+                    try {
+                        character = getCharacter(url);
+                        character.setId(id);
+                    } catch (Exception e) {
+                        System.out.println("第" + id + "个异常:" + e.getMessage());
+                        latch.countDown();
+                        return;
+                    }
+                    characterList.add(character);
+                    latch.countDown();
+                    System.out.println("第" + id + "个:" + character);
+                }
+            });
+        }
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            System.out.println(e.getMessage());
         }
         return characterList;
     }
 
     public boolean storeCharacter(){
-        ArrayList<Character> characters = generateCharList();
+        Vector<Character> characters = generateCharList();
         if (characters == null || characters.isEmpty()) {
             System.out.println("char list is empty!");
             return false;
@@ -86,5 +116,16 @@ public class Spider {
             return false;
         }
         return true;
+    }
+
+    private Character getTestCharacter() {
+        Character character = new Character();
+        character.setUrl("test");
+        character.setPingying("pingying");
+        character.setId(1);
+        character.setAttribute(Attribute.Earth);
+        character.setStrokes(12);
+        character.setKey("A");
+        return character;
     }
 }

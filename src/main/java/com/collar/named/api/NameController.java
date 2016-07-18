@@ -27,7 +27,10 @@ public class NameController {
     @ResponseBody
     public ResultResponse<ArrayList> spiderStart(HttpServletRequest request) throws Exception {
         ResultResponse<ArrayList> resultResponse = new ResultResponse<ArrayList>();
+        long startTimestamp = System.currentTimeMillis();
         resultResponse.setIsok(spider.storeCharacter());
+        long endTimestamp = System.currentTimeMillis();
+        resultResponse.setMessage("spend time: " + (endTimestamp - startTimestamp)/1000);
         return resultResponse;
     }
 }

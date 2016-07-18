@@ -26,6 +26,23 @@
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
 
+	<bean id="taskExecutor_http" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<!-- 线程池维护线程的最少数量  -->
+		<property name="corePoolSize" value="80" />
+		<!-- 线程池维护线程的最大数量 -->
+		<property name="maxPoolSize" value="100" />
+		<!-- 线程池所使用的缓冲队列长度 -->
+		<property name="queueCapacity" value="8500" />
+		<!-- 线程池维护线程所允许的空闲时间 -->
+		<property name="keepAliveSeconds" value="600" />
+		<!-- true表示线程池使用shutdown()来关闭；false表示线程池使用shutdownNow()来关闭；-->
+		<property name="WaitForTasksToCompleteOnShutdown" value="true" />
+		<!-- 线程池对拒绝任务(无线程可用)的处理策略 -->
+		<property name="rejectedExecutionHandler">
+			<bean class="java.util.concurrent.ThreadPoolExecutor$AbortPolicy" />
+		</property>
+	</bean>
+
 	<bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location">
 			<value>classpath:init.properties</value>
@@ -82,4 +99,40 @@
 	<bean id="baseJdbcDao" class="com.collar.named.dao.BaseJdbcDao">
 		<property name="dataSource" ref="dataSourceDefault"/>
 	</bean>
+	<tx:annotation-driven transaction-manager="txManager" />
+
+	<bean id="txManager"
+		  class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource">
+			<ref local="dataSourceDefault" />
+		</property>
+	</bean>
+	<bean id="txInterceptor"
+		  class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<property name="transactionManager">
+			<ref bean="txManager" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED,-Exception</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="txBeanNameProxyCreator"
+		  class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="interceptorNames">
+			<list>
+				<value>txInterceptor</value>
+			</list>
+		</property>
+		<property name="beanNames">
+			<list>
+				<value>*Service</value>
+				<value>*ServiceImpl</value>
+				<value>*Dao</value>
+				<value>*DaoImpl</value>
+			</list>
+		</property>
+	</bean>
+
 </beans>

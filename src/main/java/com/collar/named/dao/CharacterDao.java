@@ -15,7 +15,7 @@ import java.util.List;
 public class CharacterDao extends BaseJdbcDao {
 
     public int[] insertCharacterList (final List<Character> characterList) {
-        final String sql = "INSERT INTO character(key, attribute, strokes, pingying, url) VALUES(?,?,?,?) ";
+        final String sql = "INSERT INTO `character` (`key`, attribute, strokes, pingying, url, id) VALUES(?,?,?,?,?,?)";
 
         return this.jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 
@@ -26,6 +26,7 @@ public class CharacterDao extends BaseJdbcDao {
                 ps.setInt(3, character.getStrokes());
                 ps.setString(4, character.getPingying());
                 ps.setString(5, character.getUrl());
+                ps.setInt(6, character.getId());
             }
 
             public int getBatchSize() {
