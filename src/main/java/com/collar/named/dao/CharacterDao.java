@@ -1,7 +1,10 @@
 package com.collar.named.dao;
 
+import com.collar.named.entity.Attribute;
 import com.collar.named.entity.Character;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
@@ -33,5 +36,23 @@ public class CharacterDao extends BaseJdbcDao {
                 return characterList.size();
             }
         });
+    }
+
+    public Character getCharacter(String c){
+        String sql = "select * from `character` where `key` = :name";
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("name", c);
+        SqlRowSet rs = this.namedJdbcTemplate.queryForRowSet(sql, params);
+        Character character = null;
+        if(rs.next()){
+            character = new Character();
+            character.setId(rs.getInt("id"));
+            character.setKey(rs.getString("key"));
+            character.setStrokes(rs.getInt("strokes"));
+            character.setAttribute(Attribute.getAttributeById(rs.getInt("attribute")));
+            character.setUrl(rs.getString("url"));
+            character.setPingying(rs.getString("pingying"));
+        }
+        return character;
     }
 }

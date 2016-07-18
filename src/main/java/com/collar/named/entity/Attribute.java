@@ -18,10 +18,12 @@ public enum Attribute {
     private int id;
     private String name;
     private static Map<String, Attribute> nameMap = new HashMap<String, Attribute>(10);
+    private static Map<Integer, Attribute> idMap = new HashMap<Integer, Attribute>(10);
 
     static {
         for (Attribute attribute : Attribute.values()) {
             nameMap.put(attribute.name, attribute);
+            idMap.put(attribute.id, attribute);
         }
     }
 
@@ -36,6 +38,14 @@ public enum Attribute {
         }
         return nameMap.get(name);
     }
+
+    public static Attribute getAttributeById (int id) {
+        if (idMap.get(id) == null) {
+            return Unknow;
+        }
+        return idMap.get(id);
+    }
+
 
     public int getId() {
         return id;
