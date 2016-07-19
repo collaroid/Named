@@ -132,8 +132,10 @@ public class WugeService {
             return null;
         }
         int strokes = 0;
-        for (char c : name.toCharArray()) {
-            Character character1 = characterService.getCharacter(String.valueOf(c));
+        char[] nameArray = name.toCharArray();
+        int startIndex = isDCF ? 2 : 1;
+        for (int i = startIndex; i < nameArray.length; i++) {
+            Character character1 = characterService.getCharacter(String.valueOf(nameArray[i]));
             if (character1 == null) {
                 continue;
             }
