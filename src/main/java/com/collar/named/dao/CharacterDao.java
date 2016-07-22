@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,5 +55,23 @@ public class CharacterDao extends BaseJdbcDao {
             character.setPingying(rs.getString("pingying"));
         }
         return character;
+    }
+
+    public ArrayList<Character> getCharacterList () {
+        String sql = "select * from `character`";
+        SqlRowSet rs = this.jdbcTemplate.queryForRowSet(sql);
+        ArrayList<Character> characterArrayList = new ArrayList<Character>(7100);
+
+        while (rs.next()){
+            Character character = new Character();
+            character.setId(rs.getInt("id"));
+            character.setKey(rs.getString("key"));
+            character.setStrokes(rs.getInt("strokes"));
+            character.setAttribute(Attribute.getAttributeById(rs.getInt("attribute")));
+            character.setUrl(rs.getString("url"));
+            character.setPingying(rs.getString("pingying"));
+            characterArrayList.add(character);
+        }
+        return characterArrayList;
     }
 }

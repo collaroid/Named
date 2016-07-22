@@ -1,12 +1,12 @@
 package com.collar.named.entity;
 
 /**
- * Created by Frank on 7/19/16.
+ * Created by Frank on 7/21/16.
  */
-public class Wuge {
+public class Sancai {
 
     private int id;
-    private int number;
+    private String name;
     private String des;
     private String attr;
 
@@ -18,12 +18,12 @@ public class Wuge {
         this.id = id;
     }
 
-    public int getNumber() {
-        return number;
+    public String getName() {
+        return name;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDes() {

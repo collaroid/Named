@@ -19,6 +19,7 @@ public class WugeDao extends BaseJdbcDao {
         Wuge wuge = null;
         if(rs.next()){
             wuge = new Wuge();
+            wuge.setId(rs.getInt("id"));
             wuge.setNumber(rs.getInt("number"));
             wuge.setDes(rs.getString("des"));
             wuge.setAttr(rs.getString("attr"));

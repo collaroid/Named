@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 @Controller
 @RequestMapping("/spider")
-public class NameController {
+public class SpiderController {
 
     @Autowired
     @Qualifier("spider")
