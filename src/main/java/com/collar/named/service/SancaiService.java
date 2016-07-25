@@ -25,6 +25,10 @@ public class SancaiService {
         Wuge tiange = wugeService.getTianGe(name, isDCF);
         Wuge dige = wugeService.getDiGe(name, isDCF);
         Wuge renge = wugeService.getRenGe(name, isDCF);
+        return getSancai(tiange,dige,renge);
+    }
+
+    public Sancai getSancai(Wuge tiange , Wuge dige, Wuge renge){
         if (tiange == null || dige == null || renge == null) {
             return null;
         }
