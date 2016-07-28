@@ -88,7 +88,7 @@ public class WugeService {
     }
 
     /**
-     * 根据名字计算人格
+     * 根据名字计算人格, 其构成是姓氏（复姓的取复姓最后一字）与名字第一个字笔画数之和
      * @param name 名字
      * @param isDCF 是否复姓
      * @return
@@ -104,8 +104,8 @@ public class WugeService {
             fn = name.substring(1, 2);
             gn = name.substring(2, 3);
         } else {
-            fn = name.substring(1, 2);
-            gn = name.substring(2, 3);
+            fn = name.substring(0, 1);
+            gn = name.substring(1, 2);
         }
         Character character1 = characterService.getCharacter(fn);
         Character character2 = characterService.getCharacter(gn);
