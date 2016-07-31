@@ -52,8 +52,8 @@ public class NamedService {
             return;
         }
         */
-        storeName(LoadConfig.get("boy_character"), familyName, isDCF, "b");
         storeName(LoadConfig.get("girl_character"), familyName, isDCF, "g");
+        storeName(LoadConfig.get("boy_character"), familyName, isDCF, "b");
 
     }
 
@@ -64,26 +64,27 @@ public class NamedService {
             // 单字名
             for (char character : chars) {
                 String fullName1 = familyName + character;
-                isNameCanUse(fullName1, isDCF, borg);
+                // 首先判断人格,人格不符合不用再匹配其他
+                Wuge renge = wugeService.getRenGe(fullName1, isDCF);
+                if (renge == null || !level.equals(renge.getAttr())) {
+                    System.out.println(fullName1 + ": 人格不满足要求!");
+                    continue;
+                }
+                isNameCanUse(fullName1, isDCF, borg, renge);
                 // 双字名
                 for (char character2 : chars) {
                     String fullName2 = familyName + character + character2;
-                    isNameCanUse(fullName2, isDCF, borg);
+                    isNameCanUse(fullName2, isDCF, borg, renge);
                 }
             }
         }
     }
 
-    private void isNameCanUse (String fullName, boolean isDCF, String borg) {
+    private void isNameCanUse (String fullName, boolean isDCF, String borg, Wuge renge) {
         Wuge tiange = wugeService.getTianGe(fullName, isDCF);
         Wuge dige = wugeService.getDiGe(fullName, isDCF);
         if (dige == null || !level.equals(dige.getAttr())) {
             System.out.println(fullName + ": 地格不满足要求!");
-            return;
-        }
-        Wuge renge = wugeService.getRenGe(fullName, isDCF);
-        if (renge == null || !level.equals(renge.getAttr())) {
-            System.out.println(fullName + ": 人格不满足要求!");
             return;
         }
         Wuge zongge = wugeService.getZongGe(fullName);
