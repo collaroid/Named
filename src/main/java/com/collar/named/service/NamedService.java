@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Frank on 7/23/16.
  */
@@ -53,9 +56,11 @@ public class NamedService {
         }
         */
         storeName(LoadConfig.get("girl_character"), familyName, isDCF, "g");
-        storeName(LoadConfig.get("boy_character"), familyName, isDCF, "b");
+        //storeName(LoadConfig.get("boy_character"), familyName, isDCF, "b");
 
     }
+
+
 
     private void storeName(String characterString, String familyName, boolean isDCF, String borg){
         if (StringUtils.isNotBlank(characterString)) {
@@ -108,5 +113,12 @@ public class NamedService {
             return;
         }
         System.out.println(fullName + "匹配成功,存入db失败。");
+    }
+
+    public List<String> getNamePlus (String name) {
+        if (StringUtils.isBlank(name)) {
+            return new ArrayList<String>();
+        }
+        return namedPoolDao.getNamePlus(name);
     }
 }

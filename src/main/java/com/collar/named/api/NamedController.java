@@ -9,9 +9,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Frank on 7/23/16.
@@ -37,5 +39,14 @@ public class NamedController {
         resultResponse.setIsok(true);
         resultResponse.setMessage("spend time: " + (endTimestamp - startTimestamp)/1000);
         return resultResponse;
+    }
+
+    @RequestMapping(value ="getNamePlus.do")
+    public ModelAndView getNamePlus(HttpServletRequest request) throws Exception {
+        ModelAndView mv = new ModelAndView("firstname_list");
+        String name = StringUtils.trimToEmpty(request.getParameter("name"));
+        List<String> nameList = namedService.getNamePlus(name);
+        mv.addObject("nameList", nameList);
+        return mv;
     }
 }
