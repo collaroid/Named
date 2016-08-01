@@ -11,6 +11,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -56,7 +57,7 @@ public class NamedService {
         }
         */
         storeName(LoadConfig.get("girl_character"), familyName, isDCF, "g");
-        //storeName(LoadConfig.get("boy_character"), familyName, isDCF, "b");
+        storeName(LoadConfig.get("boy_character"), familyName, isDCF, "b");
 
     }
 
@@ -120,5 +121,14 @@ public class NamedService {
             return new ArrayList<String>();
         }
         return namedPoolDao.getNamePlus(name);
+    }
+
+    public static void main(String[] args) {
+        HashSet<String> list = new HashSet<String>();
+        String a = "";
+        for(char aa : a.toCharArray()) {
+            list.add(String.valueOf(aa));
+        }
+        System.out.println(list.toString().replace(", ", ""));
     }
 }
