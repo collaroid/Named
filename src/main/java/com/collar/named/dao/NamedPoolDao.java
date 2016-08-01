@@ -27,12 +27,23 @@ public class NamedPoolDao extends BaseJdbcDao {
         return this.namedJdbcTemplate.update(sql, params);
     }
 
-    public List<String> getNamePlus (String name) {
+    public List<String> getNamePlus (String name, String borg) {
         List<String> result = new ArrayList<>();
-        String sql = "SELECT `name` FROM name_pool WHERE `name` LIKE '" + name + "%' AND CHAR_LENGTH(`name`) = " + (name.length() + 1);
+        String sql = "SELECT `name` FROM name_pool WHERE `name` LIKE '" + name + "%' AND borg='" + borg + "'";
         SqlRowSet rs = this.jdbcTemplate.queryForRowSet(sql);
         while (rs.next()) {
             result.add(rs.getString("name"));
+        }
+        return result;
+    }
+
+
+    public List<String> getNameIndex (String familyName, String borg) {
+        List<String> result = new ArrayList<>();
+        String sql = "select LEFT(`Name`,2) as n from name_pool WHERE `name` LIKE '" + familyName + "%' AND borg = '" + borg + "' group by borg, n";
+        SqlRowSet rs = this.jdbcTemplate.queryForRowSet(sql);
+        while (rs.next()) {
+            result.add(rs.getString("n"));
         }
         return result;
     }

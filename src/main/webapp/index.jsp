@@ -9,8 +9,10 @@
     <script type="text/javascript" src="./js/jquery-1.7.2.min.js"></script>
 </head>
 <body>
-<form id="nameForm" action="/named/getNamePlus.do" method="post">
-<input style="width: 150px" type="text" id="name" name="name" value="" placeholder="请输入姓氏"/>
+<form id="nameForm" action="/named/getNameIndex.do" method="post">
+<input style="width: 150px" type="text" id="name" name="name" value="苏" placeholder="请输入姓氏" readonly/>
+    <input id="borg1" name="borg" type="radio" value="b" checked="checked"/>男
+    <input id="borg2" name="borg" type="radio" value="g" />女
 </form>
 <input type="button" style="width: 50px" id="doEnsure" value="查找">
 </body>

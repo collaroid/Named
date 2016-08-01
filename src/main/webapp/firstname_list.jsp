@@ -18,7 +18,7 @@
             <tr>
         </c:if>
         <td>
-            <a href="/named/getNamePlus.do?name=${name}">${name}</a>
+            <a href="/named/getNamePlus.do?name=${name}&borg=${borg}">${name}</a>
         </td>
         <c:if test="${(status.index+1)%5==0}">
             </tr>

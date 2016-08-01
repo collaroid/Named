@@ -116,11 +116,18 @@ public class NamedService {
         System.out.println(fullName + "匹配成功,存入db失败。");
     }
 
-    public List<String> getNamePlus (String name) {
+    public List<String> getNamePlus (String name, String borg) {
         if (StringUtils.isBlank(name)) {
             return new ArrayList<String>();
         }
-        return namedPoolDao.getNamePlus(name);
+        return namedPoolDao.getNamePlus(name, borg);
+    }
+
+    public List<String> getNameIndex (String familyName, String borg) {
+        if (StringUtils.isBlank(familyName)) {
+            return new ArrayList<String>();
+        }
+        return namedPoolDao.getNameIndex(familyName, borg);
     }
 
     public static void main(String[] args) {

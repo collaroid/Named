@@ -45,8 +45,21 @@ public class NamedController {
     public ModelAndView getNamePlus(HttpServletRequest request) throws Exception {
         ModelAndView mv = new ModelAndView("firstname_list");
         String name = StringUtils.trimToEmpty(request.getParameter("name"));
-        List<String> nameList = namedService.getNamePlus(name);
+        String borg = StringUtils.trimToEmpty(request.getParameter("borg"));
+        List<String> nameList = namedService.getNamePlus(name, borg);
         mv.addObject("nameList", nameList);
+        mv.addObject("borg", borg);
+        return mv;
+    }
+
+    @RequestMapping(value ="getNameIndex.do")
+    public ModelAndView getNameIndex(HttpServletRequest request) throws Exception {
+        ModelAndView mv = new ModelAndView("firstname_list");
+        String familyname = StringUtils.trimToEmpty(request.getParameter("name"));
+        String borg = StringUtils.trimToEmpty(request.getParameter("borg"));
+        List<String> nameList = namedService.getNameIndex(familyname, borg);
+        mv.addObject("nameList", nameList);
+        mv.addObject("borg", borg);
         return mv;
     }
 }
